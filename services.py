@@ -4,7 +4,11 @@ from database import find_matching_template
 from validators import data_types_validators_map
 
 
-def get_form_service(query_params: dict) -> dict[str, Any]:
+def get_form_service(query_params: dict) -> dict[str, str]:
+    """
+    Returns form name if form is found, otherwise
+    current form types.
+    """
     field_types = get_field_types(query_params)
     if matching_template := find_matching_template(field_types):
         return {"form_name": matching_template["name"]}
@@ -12,7 +16,7 @@ def get_form_service(query_params: dict) -> dict[str, Any]:
         return field_types
 
 
-def get_field_types(data: dict) -> dict:
+def get_field_types(data: dict[str, str]) -> dict[str, str]:
     """
     Assign field type to the data keys.
     """

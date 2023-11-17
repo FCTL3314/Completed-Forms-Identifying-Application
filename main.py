@@ -1,5 +1,3 @@
-from typing import Any
-
 import uvicorn
 from fastapi import FastAPI, Request
 
@@ -9,8 +7,8 @@ from services import get_form_service
 app = FastAPI()
 
 
-@app.post("/get_form")
-async def get_form(request: Request) -> dict[str, Any]:
+@app.post("/get_form", name="get_form")
+async def get_form(request: Request) -> dict[str, str]:
     return get_form_service(dict(request.query_params))
 
 

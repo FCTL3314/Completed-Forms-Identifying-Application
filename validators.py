@@ -21,7 +21,7 @@ def is_email(email: str) -> bool:
     """
     Checks whether the value is an email type.
     """
-    pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+    pattern = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
     return bool(pattern.match(email))
 
 
