@@ -1,3 +1,5 @@
+from typing import Any
+
 from tinydb import TinyDB, where
 
 db = TinyDB("database.json")
@@ -17,7 +19,7 @@ def prepare_db() -> None:
     db.insert_multiple(initial_db_data)
 
 
-def find_matching_template(data_types: dict) -> str | None:
+def find_matching_template(data_types: dict) -> dict[str, Any] | None:
     """
     Tries to find a template based on fields and their types;
     if found, returns its name, otherwise returns None.
@@ -28,8 +30,8 @@ def find_matching_template(data_types: dict) -> str | None:
             query = (where(field) == data_type)
         else:
             query &= (where(field) == data_type)
-    result = db.search(query) # noqa
+    result = db.search(query)  # noqa
 
     if len(result) > 0:
         template = result[0]
-        return template["name"]
+        return template
