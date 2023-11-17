@@ -1,36 +1,34 @@
-from tinydb import TinyDB, where, Query
+from tinydb import TinyDB, where
 
 db = TinyDB("database.json")
 
 initial_db_data = [
-    {"name": "MyFirstForm", "email": "first-email@example.com", "phone": "+7 8 812 234-56-77"},
-    {"name": "MySecondForm", "email": "second-email@example.com", "phone": "+7 8 812 234-56-78"},
-    {"name": "MyThirdForm", "email": "third-email@example.com", "phone": "+7 8 812 234-56-79"},
+    {"name": "First form", "email": "EMAIL", "phone": "PHONE"},
+    {"name": "Second form", "email": "EMAIL", "phone": "PHONE", "birth_date": "DATE"},
 ]
 
 
-def prepare_db():
+def prepare_db() -> None:
+    """
+    Clears and creates initial database data before
+    application start.
+    """
     db.truncate()
     db.insert_multiple(initial_db_data)
 
 
-def add_to_query_if_not_none_or_assign(query: Query | None, query_to_add: bool) -> Query:
-    if query is None:
-        query = query_to_add
-    else:
-        query &= query_to_add
-    return query
-
-
-def find_matching_template(data: dict) -> str | None:
+def find_matching_template(data_types: dict) -> str | None:
+    """
+    Tries to find a template based on fields and their types;
+    if found, returns its name, otherwise returns None.
+    """
     query = None
-    if name := data.get("name"):
-        query = add_to_query_if_not_none_or_assign(query, (where("name") == name))
-    if phone := data.get("phone"):
-        query = add_to_query_if_not_none_or_assign(query, (where("phone") == phone))
-    if email := data.get("email"):
-        query = add_to_query_if_not_none_or_assign(query, (where("email") == email))
-    result = db.search(query)
+    for field, data_type in data_types.items():
+        if query is None:
+            query = (where(field) == data_type)
+        else:
+            query &= (where(field) == data_type)
+    result = db.search(query) # noqa
 
     if len(result) > 0:
         template = result[0]
